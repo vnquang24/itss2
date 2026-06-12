@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+import { getActor } from '@/lib/actor';
+import { buildApprovedChannelWhere } from '@/lib/channel-access';
 import { getEnhancedDb } from '@/lib/enhanced-db';
 
 export const dynamic = 'force-dynamic';
@@ -11,11 +13,15 @@ export async function GET(req: Request) {
   }
 
   const db = await getEnhancedDb();
+  const actor = await getActor();
   const like = { contains: q, mode: 'insensitive' as const };
 
   const [channels, mentors, companies, jobs] = await Promise.all([
     db.channel.findMany({
-      where: { OR: [{ name: like }, { description: like }, { tags: { has: q } }] },
+      where: {
+        ...buildApprovedChannelWhere(actor?.role),
+        OR: [{ name: like }, { description: like }, { tags: { has: q } }],
+      },
       select: { id: true, name: true, slug: true, category: true },
       take: 5,
       orderBy: { createdAt: 'desc' },

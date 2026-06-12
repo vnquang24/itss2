@@ -2,12 +2,14 @@ import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { prisma } from '@/lib/db';
 import { getActor } from '@/lib/actor';
+import { buildApprovedChannelWhere, canAccessChannelVisibility } from '@/lib/channel-access';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Pagination } from '@/components/ui/pagination';
 import { FilterChips } from '@/components/layout/filter-chips';
+import { CreateChannelDialog } from '@/components/channels/create-channel-dialog';
 import { Search, MessagesSquare, Sparkles } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
@@ -35,6 +37,7 @@ export default async function ChannelsPage({ searchParams }: PageProps) {
   const db = prisma;
 
   const actor = await getActor();
+  const createChannelRole = actor && !actor.isGuest ? actor.role : null;
   let personalizedChannels: any[] = [];
   let studentSkills: string[] = [];
 
@@ -47,7 +50,7 @@ export default async function ChannelsPage({ searchParams }: PageProps) {
       studentSkills = profile.skills;
       personalizedChannels = await db.channel.findMany({
         where: {
-          approved: true,
+          ...buildApprovedChannelWhere(actor.role),
           tags: { hasSome: profile.skills },
         },
         include: { _count: { select: { threads: true } } },
@@ -57,8 +60,9 @@ export default async function ChannelsPage({ searchParams }: PageProps) {
     }
   }
 
+  const accessWhere = buildApprovedChannelWhere(actor?.role);
   const where = {
-    approved: true,
+    ...accessWhere,
     ...(sp.q
       ? {
           OR: [
@@ -96,6 +100,7 @@ export default async function ChannelsPage({ searchParams }: PageProps) {
             <h1 className="font-serif text-3xl tracking-tight md:text-4xl">{t('title')}</h1>
             <p className="max-w-xl text-sm text-muted-foreground md:text-base">{t('subtitle')}</p>
           </div>
+          {createChannelRole ? <CreateChannelDialog role={createChannelRole} /> : null}
         </div>
 
         <form action="/channels" className="relative mt-6 max-w-xl">
@@ -137,9 +142,16 @@ export default async function ChannelsPage({ searchParams }: PageProps) {
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between gap-2">
                       <CardTitle className="text-sm font-bold group-hover:text-primary transition-colors truncate max-w-[150px]">{c.name}</CardTitle>
-                      <Badge variant="outline" className="text-[10px] py-0 border-primary/30 text-primary bg-primary/5">
-                        {t(`categories.${c.category}`)}
-                      </Badge>
+                      <div className="flex items-center gap-1">
+                        {canAccessChannelVisibility(actor?.role, c.visibility) && c.visibility === 'MENTOR_EMPLOYER' ? (
+                          <Badge variant="outline" className="text-[10px] py-0">
+                            {t('visibility.mentorEmployerShort')}
+                          </Badge>
+                        ) : null}
+                        <Badge variant="outline" className="text-[10px] py-0 border-primary/30 text-primary bg-primary/5">
+                          {t(`categories.${c.category}`)}
+                        </Badge>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-2.5">
@@ -186,7 +198,14 @@ export default async function ChannelsPage({ searchParams }: PageProps) {
                   <CardHeader className="pb-2">
                     <div className="flex items-center justify-between gap-2">
                       <CardTitle className="text-base group-hover:text-primary">{c.name}</CardTitle>
-                      <Badge variant="muted">{t(`categories.${c.category}`)}</Badge>
+                      <div className="flex items-center gap-1">
+                        {c.visibility === 'MENTOR_EMPLOYER' ? (
+                          <Badge variant="outline" className="text-[10px] py-0">
+                            {t('visibility.mentorEmployerShort')}
+                          </Badge>
+                        ) : null}
+                        <Badge variant="muted">{t(`categories.${c.category}`)}</Badge>
+                      </div>
                     </div>
                   </CardHeader>
                   <CardContent className="space-y-3">

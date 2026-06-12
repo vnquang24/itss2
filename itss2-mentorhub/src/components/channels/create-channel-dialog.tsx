@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
+import type { Role } from '@prisma/client';
 import { Button } from '@/components/ui/button';
 import { Input, Textarea } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,6 +20,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { useToast } from '@/components/ui/toast';
 import { Plus } from 'lucide-react';
 import { createChannelAction } from '@/app/(main)/channels/actions';
+import { canCreateRestrictedChannel } from '@/lib/channel-access';
 
 const CATEGORIES = [
   'FRONTEND',
@@ -32,21 +34,41 @@ const CATEGORIES = [
   'OTHER',
 ] as const;
 
-export function CreateChannelDialog() {
+export function CreateChannelDialog({ role }: { role: Role }) {
   const t = useTranslations('channels');
   const tCommon = useTranslations('common');
   const { toast } = useToast();
   const router = useRouter();
+  const allowRestricted = canCreateRestrictedChannel(role);
   const [open, setOpen] = useState(false);
   const [pending, start] = useTransition();
   const [form, setForm] = useState({
     name: '',
     description: '',
     category: 'OTHER' as (typeof CATEGORIES)[number],
+    visibility: 'PUBLIC' as 'PUBLIC' | 'MENTOR_EMPLOYER',
     tags: '',
   });
 
-  const reset = () => setForm({ name: '', description: '', category: 'OTHER', tags: '' });
+  const reset = () =>
+    setForm({
+      name: '',
+      description: '',
+      category: 'OTHER',
+      visibility: 'PUBLIC',
+      tags: '',
+    });
+
+  function getErrorMessage(error: string) {
+    switch (error) {
+      case 'FORBIDDEN_VISIBILITY':
+        return t('restrictedCreateError');
+      case 'DUPLICATE':
+        return t('duplicateError');
+      default:
+        return error;
+    }
+  }
 
   function submit() {
     start(async () => {
@@ -54,7 +76,7 @@ export function CreateChannelDialog() {
       if (!res.ok) {
         toast({
           title: t('createError'),
-          description: res.error,
+          description: getErrorMessage(res.error),
           variant: 'destructive',
         });
         return;
@@ -119,6 +141,26 @@ export function CreateChannelDialog() {
                 ))}
               </SelectContent>
             </Select>
+          </div>
+          <div className="space-y-1.5">
+            <Label>{t('visibilityLabel')}</Label>
+            <Select
+              value={form.visibility}
+              onValueChange={(v) => setForm({ ...form, visibility: v as 'PUBLIC' | 'MENTOR_EMPLOYER' })}
+            >
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="PUBLIC">{t('visibility.public')}</SelectItem>
+                {allowRestricted ? (
+                  <SelectItem value="MENTOR_EMPLOYER">{t('visibility.mentorEmployer')}</SelectItem>
+                ) : null}
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground">
+              {allowRestricted ? t('visibilityHintRestricted') : t('visibilityHintPublicOnly')}
+            </p>
           </div>
           <div className="space-y-1.5">
             <Label htmlFor="ch-tags">{t('tagsLabel')}</Label>

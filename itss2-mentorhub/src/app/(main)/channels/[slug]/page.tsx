@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { prisma } from '@/lib/db';
+import { getActor } from '@/lib/actor';
+import { canAccessChannelVisibility } from '@/lib/channel-access';
 import { sanitizeAnonymousList } from '@/lib/anonymous';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
@@ -28,10 +30,14 @@ export default async function ChannelDetailPage({
   const page = Math.max(1, Number(sp.page) || 1);
   const q = (sp.q ?? '').trim().slice(0, 100);
   const t = await getTranslations('threads');
+  const tChannels = await getTranslations('channels');
   const db = prisma;
+  const actor = await getActor();
 
   const channel = await db.channel.findUnique({ where: { slug } });
   if (!channel) notFound();
+  if (!channel.approved && actor?.role !== 'ADMIN' && actor?.id !== channel.createdById) notFound();
+  if (channel.approved && !canAccessChannelVisibility(actor?.role, channel.visibility)) notFound();
 
   const where = {
     channelId: channel.id,
@@ -69,6 +75,9 @@ export default async function ChannelDetailPage({
         <div className="space-y-2">
           <div className="flex items-center gap-2">
             <Badge variant="muted">{channel.category}</Badge>
+            {channel.visibility === 'MENTOR_EMPLOYER' ? (
+              <Badge variant="outline">{tChannels('visibility.mentorEmployerShort')}</Badge>
+            ) : null}
             <h1 className="font-serif text-2xl tracking-tight">{channel.name}</h1>
           </div>
           {channel.description && <p className="max-w-2xl text-muted-foreground">{channel.description}</p>}

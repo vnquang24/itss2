@@ -50,6 +50,13 @@ export function RichEditor({ value, onChange, placeholder, className }: RichEdit
     const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp'];
     if (!allowedTypes.includes(file.type)) {
       alert('Vui lòng chỉ chọn tệp ảnh (JPEG, PNG, GIF, WEBP)');
+      e.target.value = '';
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Ảnh vượt quá 5MB. Vui lòng chọn ảnh nhỏ hơn.');
+      e.target.value = '';
       return;
     }
 
@@ -63,13 +70,23 @@ export function RichEditor({ value, onChange, placeholder, className }: RichEdit
       });
       const data = await res.json();
       if (data.ok && data.url) {
-        editor.chain().focus().setImage({ src: data.url }).run();
+        editor.chain().focus().setImage({ src: data.url, alt: file.name }).run();
       } else {
-        alert('Tải ảnh lên thất bại. Vui lòng thử lại.');
+        const error =
+          data.error === 'TOO_LARGE'
+            ? 'Ảnh vượt quá 5MB.'
+            : data.error === 'IMAGE_ONLY'
+              ? 'Chỉ hỗ trợ JPEG, PNG, GIF hoặc WEBP.'
+              : data.error === 'RATE_LIMIT'
+                ? 'Bạn tải ảnh quá nhanh. Vui lòng thử lại sau.'
+                : 'Tải ảnh lên thất bại. Vui lòng thử lại.';
+        alert(error);
       }
     } catch (err) {
       console.error(err);
       alert('Lỗi hệ thống khi tải ảnh.');
+    } finally {
+      e.target.value = '';
     }
   };
 

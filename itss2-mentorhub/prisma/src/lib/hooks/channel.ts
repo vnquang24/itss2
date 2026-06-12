@@ -326,9 +326,9 @@ export function useSuspenseCountChannel<TArgs extends Prisma.ChannelCountArgs, T
     const { endpoint, fetch } = getHooksContext();
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('Channel', `${endpoint}/channel/count`, args, options, fetch);
 }
-import type { ChannelCategory } from '@prisma/client';
+import type { ChannelCategory, ChannelVisibility } from '@prisma/client';
 
-export function useCheckChannel<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; name?: string; slug?: string; description?: string; category?: ChannelCategory; tags?: string; iconKey?: string; approved?: boolean; createdById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckChannel<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; name?: string; slug?: string; description?: string; category?: ChannelCategory; visibility?: ChannelVisibility; tags?: string; iconKey?: string; approved?: boolean; createdById?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('Channel', `${endpoint}/channel/check`, args, options, fetch);
 }

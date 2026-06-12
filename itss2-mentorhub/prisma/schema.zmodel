@@ -41,6 +41,11 @@ enum ChannelCategory {
   OTHER
 }
 
+enum ChannelVisibility {
+  PUBLIC
+  MENTOR_EMPLOYER
+}
+
 enum JobType {
   INTERNSHIP
   JUNIOR
@@ -237,6 +242,7 @@ model Channel {
   slug        String          @unique
   description String?         @length(0, 1000)
   category    ChannelCategory @default(OTHER)
+  visibility  ChannelVisibility @default(PUBLIC)
   tags        String[]
   iconKey     String?
   approved    Boolean         @default(false)
@@ -247,7 +253,12 @@ model Channel {
 
   threads Thread[]
 
-  @@allow('read', approved == true || auth().role == 'ADMIN' || auth() == createdBy)
+  @@allow('read',
+    auth().role == 'ADMIN' ||
+    auth() == createdBy ||
+    (approved == true && visibility == 'PUBLIC') ||
+    (approved == true && visibility == 'MENTOR_EMPLOYER' && (auth().role == 'MENTOR' || auth().role == 'EMPLOYER'))
+  )
   @@allow('create', auth() != null)
   @@allow('update,delete', auth().role == 'ADMIN' || auth() == createdBy)
 }

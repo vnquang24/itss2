@@ -103,10 +103,20 @@
     "nameLabel": "Tên kênh",
     "descLabel": "Mô tả",
     "categoryLabel": "Danh mục",
+    "visibilityLabel": "Phạm vi hiển thị",
     "tagsLabel": "Thẻ (cách nhau bằng dấu phẩy)",
     "createSuccess": "Đã tạo kênh.",
     "createPending": "Đã gửi đề xuất kênh. Chờ quản trị viên duyệt.",
     "createError": "Không thể tạo kênh",
+    "restrictedCreateError": "Chỉ cố vấn, doanh nghiệp hoặc quản trị viên mới tạo được kênh nội bộ.",
+    "duplicateError": "Tên kênh hoặc slug đã tồn tại.",
+    "visibilityHintRestricted": "Bạn có thể tạo kênh công khai hoặc kênh nội bộ chỉ dành cho cố vấn và doanh nghiệp.",
+    "visibilityHintPublicOnly": "Tài khoản của bạn hiện chỉ có thể đề xuất kênh công khai.",
+    "visibility": {
+      "public": "Công khai",
+      "mentorEmployer": "Chỉ cố vấn & doanh nghiệp",
+      "mentorEmployerShort": "Nội bộ"
+    },
     "categories": {
       "FRONTEND": "Frontend",
       "BACKEND": "Backend",

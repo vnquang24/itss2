@@ -103,10 +103,20 @@
     "nameLabel": "チャンネル名",
     "descLabel": "説明",
     "categoryLabel": "カテゴリ",
+    "visibilityLabel": "公開範囲",
     "tagsLabel": "タグ(カンマ区切り)",
     "createSuccess": "チャンネルを作成しました。",
     "createPending": "提案を送信しました。承認をお待ちください。",
     "createError": "作成に失敗しました",
+    "restrictedCreateError": "限定チャンネルはメンター・企業・管理者のみ作成できます。",
+    "duplicateError": "チャンネル名またはslugが既に存在します。",
+    "visibilityHintRestricted": "公開チャンネルに加えて、メンターと企業限定の内部チャンネルも作成できます。",
+    "visibilityHintPublicOnly": "現在のアカウントでは公開チャンネルのみ提案できます。",
+    "visibility": {
+      "public": "公開",
+      "mentorEmployer": "メンター・企業限定",
+      "mentorEmployerShort": "内部"
+    },
     "categories": {
       "FRONTEND": "フロントエンド",
       "BACKEND": "バックエンド",

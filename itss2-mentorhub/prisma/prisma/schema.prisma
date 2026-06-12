@@ -31,6 +31,11 @@ enum ChannelCategory {
   OTHER
 }
 
+enum ChannelVisibility {
+  PUBLIC
+  MENTOR_EMPLOYER
+}
+
 enum JobType {
   INTERNSHIP
   JUNIOR
@@ -181,18 +186,19 @@ model Company {
 }
 
 model Channel {
-  id          String          @id() @default(cuid())
-  name        String          @unique()
-  slug        String          @unique()
+  id          String            @id() @default(cuid())
+  name        String            @unique()
+  slug        String            @unique()
   description String?
-  category    ChannelCategory @default(OTHER)
+  category    ChannelCategory   @default(OTHER)
+  visibility  ChannelVisibility @default(PUBLIC)
   tags        String[]
   iconKey     String?
-  approved    Boolean         @default(false)
+  approved    Boolean           @default(false)
   createdById String?
-  createdBy   User?           @relation("ChannelCreator", fields: [createdById], references: [id])
-  createdAt   DateTime        @default(now())
-  updatedAt   DateTime        @updatedAt()
+  createdBy   User?             @relation("ChannelCreator", fields: [createdById], references: [id])
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt()
   threads     Thread[]
 }
 

@@ -553,6 +553,10 @@ const metadata: ModelMeta = {
                     name: "category",
                     type: "ChannelCategory",
                     attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, visibility: {
+                    name: "visibility",
+                    type: "ChannelVisibility",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
                 }, tags: {
                     name: "tags",
                     type: "String",
