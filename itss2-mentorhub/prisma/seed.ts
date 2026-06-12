@@ -73,6 +73,9 @@ async function main() {
   const my = await upsertUser('my@student.local', 'Ngô Diễm My', 'STUDENT', pwd);
   const phuc = await upsertUser('phuc@student.local', 'Trịnh Hữu Phúc', 'STUDENT', pwd);
   const quynh = await upsertUser('quynh@student.local', 'Lý Như Quỳnh', 'STUDENT', pwd);
+  const viet = await upsertUser('viet@student.local', 'Hoàng Văn Việt', 'STUDENT', pwd);
+  const nhi = await upsertUser('nhi@student.local', 'Phạm Yến Nhi', 'STUDENT', pwd);
+  const tam = await upsertUser('tam@student.local', 'Nguyễn Minh Tâm', 'STUDENT', pwd);
 
   await prisma.studentProfile.upsert({
     where: { userId: alice.id },
@@ -128,7 +131,9 @@ async function main() {
   void my;
   void phuc;
   void quynh;
-  void employer;
+  void viet;
+  void nhi;
+  void tam;
 
   // ---- Cố vấn (mentors) — phong phú, nhiều ngành ------------------------
   const mentorSeeds: MentorSeed[] = [
@@ -267,6 +272,60 @@ async function main() {
       expertise: ['unity', 'solidity', 'web3', 'game-dev'],
       bio: 'Phát triển game blockchain với hàng triệu user. Tư vấn các bạn quan tâm game dev hoặc Web3 — hai lĩnh vực ngách nhưng đang rất khát người.',
     },
+    {
+      email: 'mentor.hoang@itss.local',
+      name: 'Trần Văn Hoàng',
+      company: 'Viettel Digital',
+      position: 'Principal Database Administrator',
+      yearsOfExperience: 12,
+      expertise: ['postgres', 'oracle', 'query-tuning', 'replication', 'sql'],
+      bio: 'Vận hành cụm database hàng chục TB cho hệ thống viễn thông. Chuyên sâu index strategy, query plan, high-availability. Sẵn lòng review schema và "khám bệnh" câu query chậm cho các bạn.',
+    },
+    {
+      email: 'mentor.dang@itss.local',
+      name: 'Nguyễn Hải Đăng',
+      company: 'AWS (Singapore)',
+      position: 'Senior Solutions Architect',
+      yearsOfExperience: 11,
+      expertise: ['aws', 'cloud-architecture', 'serverless', 'cost-optimization', 'well-architected'],
+      bio: 'Tư vấn kiến trúc cloud cho doanh nghiệp lớn khu vực APAC. Đam mê chia sẻ về Well-Architected Framework, tối ưu chi phí cloud và lộ trình lấy chứng chỉ AWS.',
+    },
+    {
+      email: 'mentor.cuong@itss.local',
+      name: 'Lê Quốc Cường',
+      company: 'Bosch Global Software',
+      position: 'Senior Embedded Engineer',
+      yearsOfExperience: 9,
+      expertise: ['c', 'cpp', 'embedded', 'iot', 'rtos', 'firmware'],
+      bio: 'Lập trình firmware cho hệ thống ô tô và IoT. Tư vấn cho các bạn yêu thích phần cứng – phần mềm nhúng, một ngạch ít người theo nhưng lương cao và bền vững.',
+    },
+    {
+      email: 'mentor.phuong@itss.local',
+      name: 'Đặng Mai Phương',
+      company: 'MoMo',
+      position: 'Senior Product Manager',
+      yearsOfExperience: 8,
+      expertise: ['product', 'roadmap', 'user-research', 'data-driven', 'a-b-testing'],
+      bio: 'Quản lý sản phẩm cho ví điện tử chục triệu user. Chia sẻ về cách viết PRD, ưu tiên backlog, làm việc với engineer, và lộ trình chuyển từ dev sang Product Manager.',
+    },
+    {
+      email: 'mentor.nghia@itss.local',
+      name: 'Vũ Đình Nghĩa',
+      company: 'FPT IS',
+      position: 'Senior ERP / SAP Consultant',
+      yearsOfExperience: 10,
+      expertise: ['sap', 'erp', 'abap', 'business-process', 'integration'],
+      bio: 'Triển khai ERP cho các tập đoàn sản xuất. Hướng dẫn các bạn quan tâm mảng ERP/SAP — lĩnh vực kết hợp nghiệp vụ doanh nghiệp và công nghệ, nhu cầu tuyển dụng luôn cao.',
+    },
+    {
+      email: 'mentor.tung@itss.local',
+      name: 'Bùi Thanh Tùng',
+      company: 'Freelancer (Upwork Top Rated)',
+      position: 'Full-stack Freelance Engineer',
+      yearsOfExperience: 7,
+      expertise: ['freelance', 'nextjs', 'nodejs', 'client-management', 'personal-brand'],
+      bio: 'Freelancer toàn thời gian 4 năm, top-rated trên Upwork. Tư vấn cách bắt đầu freelance, định giá, tìm khách nước ngoài và xây personal brand cho dev muốn làm tự do.',
+    },
   ];
 
   const mentorUsers: Record<string, { id: string }> = {};
@@ -311,7 +370,9 @@ async function main() {
     'my@student.local': my.id,
     'phuc@student.local': phuc.id,
     'quynh@student.local': quynh.id,
-    'hr@fpt.local': employer.id,
+    'viet@student.local': viet.id,
+    'nhi@student.local': nhi.id,
+    'tam@student.local': tam.id,
     ...Object.fromEntries(Object.entries(mentorUsers).map(([email, u]) => [email, u.id])),
   };
 
@@ -871,6 +932,23 @@ async function main() {
             },
           ],
         },
+        {
+          id: 'th-ai-2',
+          title: 'Xây app dùng LLM (RAG) — fresher cần biết những mảnh ghép gì?',
+          authorEmail: 'viet@student.local',
+          tags: ['llm', 'rag', 'vector-db'],
+          content:
+            '<p>Em muốn làm đồ án "chatbot hỏi đáp tài liệu nội bộ" dùng LLM. Em nghe nói tới RAG, vector DB, embedding mà chưa hình dung được bức tranh tổng thể. Anh chị vẽ giúp em với ạ?</p>',
+          answers: [
+            {
+              id: 'an-ai-2-1',
+              authorEmail: 'mentor.giang@itss.local',
+              accepted: true,
+              content:
+                '<p><strong>RAG</strong> (Retrieval-Augmented Generation) gồm 2 pha:</p><p><strong>Pha index (offline):</strong></p><ol><li><strong>Chunk</strong>: cắt tài liệu thành đoạn ~300–800 token, có overlap.</li><li><strong>Embed</strong>: đưa từng chunk qua model embedding (OpenAI <code>text-embedding-3</code>, hoặc <code>bge-m3</code> open-source) → vector.</li><li><strong>Lưu vector</strong>: vào vector DB (pgvector, Qdrant, Pinecone).</li></ol><p><strong>Pha query (online):</strong></p><ol><li>Embed câu hỏi của user → vector.</li><li><strong>Retrieve</strong>: tìm top-k chunk gần nhất (cosine similarity).</li><li><strong>Augment</strong>: nhét các chunk đó vào prompt làm context.</li><li><strong>Generate</strong>: LLM trả lời <em>dựa trên</em> context → giảm bịa (hallucination), trích nguồn được.</li></ol><p>Lời khuyên cho đồ án:</p><ul><li>Bắt đầu với <strong>pgvector</strong> (chỉ là extension của Postgres bạn đã có) thay vì dựng Pinecone.</li><li>Chất lượng RAG phụ thuộc <strong>chunking + retrieval</strong> nhiều hơn là model. Đừng vội đổ lỗi cho LLM.</li><li>Luôn hiển thị <em>nguồn trích dẫn</em> — vừa tăng tin cậy, vừa dễ debug khi trả lời sai.</li></ul>',
+            },
+          ],
+        },
       ],
     },
 
@@ -898,6 +976,23 @@ async function main() {
               accepted: true,
               content:
                 '<p>Quyết định theo bối cảnh:</p><ul><li><strong>React Native</strong>: bạn đã giỏi React/TS → reuse skill, share code với web khả thi. Hệ sinh thái NPM khổng lồ. Nhược: build process còn lằng nhằng, UI native trên 2 nền tảng cần fine-tune.</li><li><strong>Flutter</strong>: UI cực kỳ consistent giữa iOS/Android (Skia tự render), DX rất mượt (hot reload), Dart dễ học. Nhược: phải học ngôn ngữ mới, package ecosystem ít hơn JS.</li></ul><p>Với startup 1 dev đã quen React → <strong>React Native + Expo</strong>. Expo bỏ 80% pain về build/deploy. Khi nào cần native module phức tạp mới eject.</p><p>Nếu bạn từ Java/Kotlin/Android background → Flutter sẽ nhanh hơn.</p>',
+            },
+          ],
+        },
+        {
+          id: 'th-mb-2',
+          title: 'Quy trình release app lên App Store / Play Store lần đầu cần lưu ý gì?',
+          authorEmail: 'nhi@student.local',
+          tags: ['release', 'app-store', 'play-store'],
+          content:
+            '<p>App đầu tay của em sắp xong. Em chưa từng submit lên store, nghe nói hay bị Apple reject. Mọi người chia sẻ checklist trước khi nộp giúp em với ạ?</p>',
+          answers: [
+            {
+              id: 'an-mb-2-1',
+              authorEmail: 'mentor.son@itss.local',
+              accepted: true,
+              content:
+                '<p>Checklist từ kinh nghiệm submit hàng chục lần:</p><p><strong>Apple App Store (khó tính hơn):</strong></p><ol><li><strong>Privacy</strong>: khai báo đầy đủ data collection trong App Privacy. Có tài khoản? Phải có cách <em>xóa tài khoản</em> trong app (Apple bắt buộc từ 2022).</li><li><strong>Đăng nhập</strong>: nếu có login mạng xã hội (Google/Facebook) thì bắt buộc thêm <em>Sign in with Apple</em>.</li><li><strong>Demo account</strong>: cung cấp tài khoản test cho reviewer, nếu không họ reject ngay.</li><li><strong>Không "web wrapper"</strong>: app chỉ bọc website sẽ bị từ chối (guideline 4.2).</li></ol><p><strong>Google Play (dễ hơn nhưng vẫn cần):</strong></p><ul><li>Target API level mới nhất (Google cập nhật yêu cầu hàng năm).</li><li>Data Safety form khai đúng.</li><li>App đầu tiên thường bị review chậm 3–7 ngày (tài khoản mới bị soi kỹ).</li></ul><p>Mẹo: đọc kỹ rejection message — Apple ghi rõ guideline number. Đa số reject lần đầu là privacy / account deletion, fix nhanh là pass.</p>',
             },
           ],
         },
@@ -1106,6 +1201,114 @@ async function main() {
               accepted: true,
               content:
                 '<p>Framework <strong>BLUF</strong> (Bottom Line Up Front) + analogy:</p><ol><li><strong>Câu đầu tiên = kết luận / tác động</strong>. KHÔNG mô tả nguyên nhân kỹ thuật trước.</li><li><strong>Tác động → con số / thời gian / tiền</strong> mà stakeholder hiểu.</li><li><strong>Nguyên nhân</strong> dùng analogy đời sống (DB = tủ hồ sơ, cache = sổ tay để bàn, deploy = mở lại nhà hàng).</li><li><strong>Action item + ETA</strong> rõ ràng.</li></ol><p>Ví dụ — KHÔNG hiệu quả:</p><blockquote><p>"Bug xảy ra do race condition giữa Redis cache và Postgres replica lag khi user đồng thời update profile..."</p></blockquote><p>Hiệu quả (BLUF):</p><blockquote><p>"Khoảng 200 user trong 1h qua thấy profile bị revert. Đã fix, đang deploy, xong trong 30 phút. Nguyên nhân: 2 hệ thống bên trong không đồng bộ kịp khi user cập nhật quá nhanh — như hai nhân viên ghi sổ chồng lên nhau. Em sẽ thêm cơ chế chống chồng chéo trong tuần này, sẽ không tái diễn."</p></blockquote><p>Stakeholder cần 3 thứ: <em>chuyện gì đang xảy ra, ảnh hưởng gì, khi nào hết</em>. Chi tiết kỹ thuật chỉ khi họ hỏi.</p>',
+            },
+          ],
+        },
+      ],
+    },
+
+    // ====================================================================
+    // 12. DATABASE & SQL
+    // ====================================================================
+    {
+      name: 'Database, SQL & Tối ưu truy vấn',
+      slug: 'database-sql',
+      category: 'BACKEND',
+      tags: ['sql', 'postgres', 'index', 'query-tuning', 'database'],
+      description:
+        'Thiết kế schema, index strategy, đọc query plan, transaction & isolation level, migration an toàn. Nơi "khám bệnh" cho những câu query chậm và những bảng phình to.',
+      threads: [
+        {
+          id: 'th-db-1',
+          title: 'Index sao cho đúng — đánh index nhiều có làm chậm ghi không?',
+          authorEmail: 'viet@student.local',
+          tags: ['index', 'postgres', 'performance'],
+          content:
+            '<p>Em nghe nói "cứ query chậm thì thêm index". Nhưng sếp em bảo đừng lạm dụng index. Em rối quá: index lúc nào nên thêm, lúc nào hại ạ?</p>',
+          answers: [
+            {
+              id: 'an-db-1-1',
+              authorEmail: 'mentor.hoang@itss.local',
+              accepted: true,
+              content:
+                '<p>Index là con dao hai lưỡi. Nguyên tắc của mình sau 12 năm làm DBA:</p><ul><li><strong>Index tăng tốc đọc, làm chậm ghi</strong>: mỗi <code>INSERT/UPDATE/DELETE</code> phải cập nhật mọi index liên quan. Bảng ghi nhiều (log, event) → ít index thôi.</li><li><strong>Đánh index cho cột xuất hiện ở <code>WHERE</code>, <code>JOIN</code>, <code>ORDER BY</code></strong> — và có tính chọn lọc cao (nhiều giá trị khác nhau). Index cột <code>gender</code> (2 giá trị) gần như vô dụng.</li><li><strong>Composite index có thứ tự</strong>: <code>(user_id, created_at)</code> phục vụ query lọc theo <code>user_id</code> rồi sort <code>created_at</code>. Đảo thứ tự là khác nhau hoàn toàn (quy tắc "leftmost prefix").</li></ul><p>Cách kiểm chứng: luôn chạy <code>EXPLAIN ANALYZE</code> trước và sau. Thấy <code>Seq Scan</code> trên bảng to → ứng viên cần index. Thấy <code>Index Scan</code> rồi → đừng thêm nữa.</p><p>Mẹo: tìm index thừa bằng <code>pg_stat_user_indexes</code> — cột <code>idx_scan = 0</code> nghĩa là index chưa từng được dùng, cân nhắc xóa.</p>',
+            },
+            {
+              id: 'an-db-1-2',
+              authorEmail: 'mentor.linh@itss.local',
+              content:
+                '<p>Bổ sung: với Postgres, để ý <strong>partial index</strong> (<code>WHERE status = \'active\'</code>) cho bảng có nhiều bản ghi "chết". Index nhỏ hơn, nhanh hơn, đỡ tốn ghi.</p>',
+            },
+          ],
+        },
+        {
+          id: 'th-db-2',
+          title: 'Transaction isolation level — REPEATABLE READ với READ COMMITTED khác gì?',
+          authorEmail: 'tam@student.local',
+          tags: ['transaction', 'isolation', 'concurrency'],
+          content:
+            '<p>Em làm chức năng trừ tồn kho, sợ bị race condition bán quá số lượng. Em đọc về isolation level mà rối. Mọi người giải thích thực tế giúp em với ạ?</p>',
+          answers: [
+            {
+              id: 'an-db-2-1',
+              authorEmail: 'mentor.hoang@itss.local',
+              accepted: true,
+              content:
+                '<p>Tóm tắt thực dụng (Postgres):</p><ul><li><strong>READ COMMITTED</strong> (mặc định): mỗi câu lệnh thấy snapshot mới nhất đã commit. Có thể gặp "non-repeatable read" — đọc 2 lần trong cùng transaction ra 2 kết quả.</li><li><strong>REPEATABLE READ</strong>: cả transaction thấy 1 snapshot cố định. Postgres còn chống được phantom read ở mức này.</li><li><strong>SERIALIZABLE</strong>: như thể các transaction chạy tuần tự. An toàn nhất, nhưng có thể bị abort (<code>serialization failure</code>) và phải retry.</li></ul><p>Cho bài toán trừ tồn kho, đừng chỉ dựa vào isolation level. Hai cách chắc ăn:</p><ol><li><strong>Pessimistic lock</strong>: <code>SELECT quantity FROM products WHERE id = ? FOR UPDATE</code> — khóa dòng cho tới khi commit, các transaction khác phải chờ.</li><li><strong>Atomic update có điều kiện</strong>: <code>UPDATE products SET quantity = quantity - 1 WHERE id = ? AND quantity &gt; 0</code> rồi kiểm tra số dòng affected. Không trừ âm được, không cần lock tường minh.</li></ol><p>Mình thường ưu tiên cách 2 vì đơn giản và ít deadlock hơn.</p>',
+            },
+          ],
+        },
+      ],
+    },
+
+    // ====================================================================
+    // 13. KHỞI NGHIỆP & SẢN PHẨM
+    // ====================================================================
+    {
+      name: 'Khởi nghiệp, Product & Quản lý sản phẩm',
+      slug: 'startup-product',
+      category: 'CAREER',
+      tags: ['startup', 'product', 'pm', 'mvp', 'business'],
+      description:
+        'Từ ý tưởng đến MVP, validate thị trường, làm việc với founder, lộ trình chuyển sang Product Manager. Góc nhìn từ người đã build sản phẩm thật.',
+      threads: [
+        {
+          id: 'th-st-1',
+          title: 'Sinh viên muốn làm startup — nên bắt đầu từ đâu để không "chết yểu"?',
+          authorEmail: 'nhi@student.local',
+          tags: ['startup', 'mvp', 'validation'],
+          content:
+            '<p>Nhóm em 3 đứa có ý tưởng app kết nối gia sư. Bọn em định code luôn 4 tháng cho xong rồi mới launch. Anh chị có kinh nghiệm startup tư vấn giúp tụi em với ạ?</p>',
+          answers: [
+            {
+              id: 'an-st-1-1',
+              authorEmail: 'mentor.duy@itss.local',
+              accepted: true,
+              content:
+                '<p>Khoan code 4 tháng! Đây là cái bẫy số 1 của founder kỹ thuật. Thứ tự nên làm:</p><ol><li><strong>Validate vấn đề trước</strong>: phỏng vấn 20–30 gia sư và phụ huynh thật. Họ có thực sự "đau" không? Họ đang giải quyết bằng cách nào (Facebook group, trung tâm)?</li><li><strong>MVP không cần code</strong>: thử "concierge MVP" — bạn làm trung gian thủ công qua Zalo/Google Form trước. Nếu 10 người chịu trả tiền qua cách thủ công, ý tưởng có cửa.</li><li><strong>Đo 1 chỉ số duy nhất</strong>: ví dụ "số buổi học được kết nối thành công/tuần". Đừng xây 20 tính năng.</li><li><strong>Code MVP tối thiểu (2–4 tuần)</strong> chỉ khi đã có tín hiệu. Một landing page + form + thanh toán tay là đủ để bắt đầu.</li></ol><p>Câu thần chú: <em>"Fall in love with the problem, not the solution"</em>. 90% startup chết vì build thứ không ai cần, không phải vì code dở.</p>',
+            },
+            {
+              id: 'an-st-1-2',
+              authorEmail: 'mentor.phuong@itss.local',
+              content:
+                '<p>Từ góc PM: trước khi code, vẽ <strong>user journey</strong> của 1 phụ huynh từ lúc "cần gia sư" đến "thanh toán xong". Mỗi bước hỏi "chỗ này họ bỏ cuộc vì sao?". Bạn sẽ thấy 80% giá trị nằm ở 2-3 bước, tập trung vào đó thôi.</p>',
+            },
+          ],
+        },
+        {
+          id: 'th-st-2',
+          title: 'Dev muốn chuyển sang Product Manager — cần chuẩn bị gì?',
+          authorEmail: 'quynh@student.local',
+          tags: ['career-switch', 'product-manager', 'roadmap'],
+          content:
+            '<p>Em là dev 2 năm kinh nghiệm, thấy mình thích nói chuyện với user và định hình sản phẩm hơn là code thuần. Lộ trình chuyển sang PM cho người có nền kỹ thuật nên thế nào ạ?</p>',
+          answers: [
+            {
+              id: 'an-st-2-1',
+              authorEmail: 'mentor.phuong@itss.local',
+              accepted: true,
+              content:
+                '<p>Nền kỹ thuật là lợi thế cực lớn của bạn (technical PM rất được săn). Lộ trình mình gợi ý:</p><ol><li><strong>Tận dụng vị trí hiện tại</strong>: xin tham gia viết spec, làm việc với PM team bạn. Tình nguyện làm "feature owner" cho 1 tính năng nhỏ end-to-end.</li><li><strong>Học khung tư duy PM</strong>: prioritization (RICE, MoSCoW), viết PRD, định nghĩa success metric, A/B testing cơ bản.</li><li><strong>Rèn user empathy</strong>: tự làm 5 buổi phỏng vấn user. Đây là kỹ năng dev hay thiếu nhất.</li><li><strong>Data literacy</strong>: SQL bạn đã có; học thêm phân tích funnel, retention, cohort. Biết "đọc" số để ra quyết định.</li><li><strong>Chuyển nội bộ trước</strong>: dễ hơn nhảy công ty. Công ty tin tưởng dev đã hiểu sản phẩm chuyển sang PM hơn người ngoài.</li></ol><p>Lưu ý: PM không phải "sếp của dev". Bạn sẽ mất quyền "tự code cho xong" và phải thuyết phục, ưu tiên, nói không rất nhiều. Một số dev nhớ cảm giác "ship code" và quay lại — thử trước khi cam kết.</p>',
             },
           ],
         },
