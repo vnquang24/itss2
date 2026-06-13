@@ -327,7 +327,7 @@ export function useSuspenseCountMentorProfile<TArgs extends Prisma.MentorProfile
     return useSuspenseModelQuery<TQueryFnData, TData, TError>('MentorProfile', `${endpoint}/mentorProfile/count`, args, options, fetch);
 }
 
-export function useCheckMentorProfile<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; userId?: string; company?: string; position?: string; yearsOfExperience?: number; expertise?: string; bio?: string; verified?: boolean; openToChat?: boolean }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
+export function useCheckMentorProfile<TError = DefaultError>(args: { operation: PolicyCrudKind; where?: { id?: string; userId?: string; company?: string; position?: string; yearsOfExperience?: number; expertise?: string; bio?: string; verified?: boolean; openToChat?: boolean; github?: string; linkedin?: string; achievements?: string }; }, options?: (Omit<UseQueryOptions<boolean, TError, boolean>, 'queryKey'> & ExtraQueryOptions)) {
     const { endpoint, fetch } = getHooksContext();
     return useModelQuery<boolean, boolean, TError>('MentorProfile', `${endpoint}/mentorProfile/check`, args, options, fetch);
 }

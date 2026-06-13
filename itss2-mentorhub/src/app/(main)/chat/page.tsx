@@ -78,22 +78,22 @@ export default async function ChatPage() {
           </CardContent>
         </Card>
       ) : (
-        <div className="space-y-2">
+        <div className="space-y-3">
           {rooms.map((r) => {
             const other = r.userA.id === actor.id ? r.userB : r.userA;
             const last = r.messages[0];
             const unread = r._count.messages;
             return (
-              <Link key={r.id} href={`/chat/${r.id}`}>
-                <Card className="transition-colors hover:border-primary/40">
+              <Link key={r.id} href={`/chat/${r.id}`} className="block">
+                <Card className="premium-glow-card transition-all border border-border/60 hover:border-primary/45 shadow-2xs">
                   <CardContent className="flex items-center gap-3 py-3">
-                    <Avatar className="h-10 w-10">
+                    <Avatar className="h-10 w-10 border border-border/30">
                       {other.image && <AvatarImage src={other.image} alt={other.name} />}
                       <AvatarFallback>{initials(other.name)}</AvatarFallback>
                     </Avatar>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <p className="truncate font-medium">{other.name}</p>
+                        <p className="truncate font-semibold">{other.name}</p>
                         {unread > 0 && (
                           <Badge
                             variant="default"
@@ -122,6 +122,7 @@ export default async function ChatPage() {
             );
           })}
         </div>
+
       )}
     </div>
   );

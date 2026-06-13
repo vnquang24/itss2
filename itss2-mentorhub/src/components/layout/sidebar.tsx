@@ -3,14 +3,15 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { MessagesSquare, Users, MessageCircle } from 'lucide-react';
+import { MessagesSquare, Users, MessageCircle, Bookmark } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// Bản demo: chỉ giữ Kênh thảo luận, Cố vấn và Tin nhắn ở thanh điều hướng.
+// Added Bookmarks to navigation items
 const items = [
   { href: '/channels', key: 'channels', icon: MessagesSquare },
   { href: '/mentors', key: 'mentors', icon: Users },
   { href: '/chat', key: 'chat', icon: MessageCircle },
+  { href: '/bookmarks', key: 'bookmarks', icon: Bookmark },
 ] as const;
 
 export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
@@ -32,7 +33,7 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
         </div>
       </Link>
       <div className="mx-3 mb-3 h-px bg-border" />
-      <nav className="flex flex-col gap-0.5">
+      <nav className="flex flex-col gap-1">
         {items.map((item) => {
           const Icon = item.icon;
           const active = pathname.startsWith(item.href);
@@ -42,13 +43,13 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
               href={item.href}
               onClick={onNavigate}
               className={cn(
-                'flex items-center gap-3 rounded-md px-3 py-2 text-sm transition-colors',
+                'flex items-center gap-3 rounded-md px-3 py-2.5 text-[15px] transition-colors',
                 active
-                  ? 'bg-accent text-accent-foreground font-medium'
+                  ? 'bg-accent text-accent-foreground font-semibold'
                   : 'text-muted-foreground hover:bg-accent/60 hover:text-foreground',
               )}
             >
-              <Icon className="h-4 w-4" />
+              <Icon className="h-4.5 w-4.5" />
               <span>{t(item.key)}</span>
             </Link>
           );
@@ -60,8 +61,8 @@ export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
 
 export function Sidebar() {
   return (
-    <aside className="hidden md:flex md:w-60 lg:w-64 shrink-0 flex-col border-r border-border bg-card/40 px-3 py-4">
+    <div className="flex h-full w-full flex-col px-3 py-4">
       <SidebarNav />
-    </aside>
+    </div>
   );
 }

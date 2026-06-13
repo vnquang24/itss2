@@ -96,6 +96,7 @@ model User {
   channelsCreated Channel[]        @relation("ChannelCreator")
   votes           AnswerVote[]
   notifications   Notification[]   @relation("NotificationRecipient")
+  bookmarks       Bookmark[]
 }
 
 model Account {
@@ -153,6 +154,9 @@ model MentorProfile {
   bio               String?
   verified          Boolean  @default(false)
   openToChat        Boolean  @default(true)
+  github            String?
+  linkedin          String?
+  achievements      String?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt()
 }
@@ -351,4 +355,15 @@ model Report {
   resolution String?
   createdAt  DateTime     @default(now())
   updatedAt  DateTime     @updatedAt()
+}
+
+model Bookmark {
+  id        String   @id() @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  targetId  String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, type, targetId])
 }

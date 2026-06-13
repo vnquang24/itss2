@@ -111,6 +111,7 @@ model User {
   channelsCreated Channel[]     @relation("ChannelCreator")
   votes           AnswerVote[]
   notifications   Notification[] @relation("NotificationRecipient")
+  bookmarks       Bookmark[]
 
   @@allow('read', auth() != null)
   @@allow('create', auth() == null || auth().role == 'ADMIN')
@@ -184,6 +185,9 @@ model MentorProfile {
   bio               String?  @length(0, 4000)
   verified          Boolean  @default(false)
   openToChat        Boolean  @default(true)
+  github            String?
+  linkedin          String?
+  achievements      String?  @length(0, 4000)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
@@ -463,3 +467,19 @@ model Report {
   @@allow('create', auth() != null && reporter == auth())
   @@allow('update,delete', auth().role == 'ADMIN')
 }
+
+// ============================================================================
+// BOOKMARKS
+// ============================================================================
+model Bookmark {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String   // 'MENTOR', 'THREAD', 'ANSWER'
+  targetId  String
+  createdAt DateTime @default(now())
+
+  @@unique([userId, type, targetId])
+  @@allow('all', auth() != null && (auth().id == userId || auth().role == 'ADMIN'))
+}
+

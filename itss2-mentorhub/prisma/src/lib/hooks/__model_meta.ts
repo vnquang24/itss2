@@ -139,6 +139,12 @@ const metadata: ModelMeta = {
                     isDataModel: true,
                     isArray: true,
                     backLink: 'recipient',
+                }, bookmarks: {
+                    name: "bookmarks",
+                    type: "Bookmark",
+                    isDataModel: true,
+                    isArray: true,
+                    backLink: 'user',
                 },
             }, uniqueConstraints: {
                 id: {
@@ -381,6 +387,18 @@ const metadata: ModelMeta = {
                     name: "openToChat",
                     type: "Boolean",
                     attributes: [{ "name": "@default", "args": [{ "name": "value", "value": true }] }],
+                }, github: {
+                    name: "github",
+                    type: "String",
+                    isOptional: true,
+                }, linkedin: {
+                    name: "linkedin",
+                    type: "String",
+                    isOptional: true,
+                }, achievements: {
+                    name: "achievements",
+                    type: "String",
+                    isOptional: true,
                 }, createdAt: {
                     name: "createdAt",
                     type: "DateTime",
@@ -1183,10 +1201,51 @@ const metadata: ModelMeta = {
                 },
             },
         },
+        bookmark: {
+            name: 'Bookmark', fields: {
+                id: {
+                    name: "id",
+                    type: "String",
+                    isId: true,
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                }, userId: {
+                    name: "userId",
+                    type: "String",
+                    isForeignKey: true,
+                    relationField: 'user',
+                }, user: {
+                    name: "user",
+                    type: "User",
+                    isDataModel: true,
+                    backLink: 'bookmarks',
+                    isRelationOwner: true,
+                    onDeleteAction: 'Cascade',
+                    foreignKeyMapping: { "id": "userId" },
+                }, type: {
+                    name: "type",
+                    type: "String",
+                }, targetId: {
+                    name: "targetId",
+                    type: "String",
+                }, createdAt: {
+                    name: "createdAt",
+                    type: "DateTime",
+                    attributes: [{ "name": "@default", "args": [{ "name": "value" }] }],
+                },
+            }, uniqueConstraints: {
+                id: {
+                    name: "id",
+                    fields: ["id"]
+                }, userId_type_targetId: {
+                    name: "userId_type_targetId",
+                    fields: ["userId", "type", "targetId"]
+                },
+            },
+        },
 
     },
     deleteCascade: {
-        user: ['Account', 'Session', 'StudentProfile', 'MentorProfile', 'EmployerProfile', 'AnswerVote', 'Notification', 'Application'],
+        user: ['Account', 'Session', 'StudentProfile', 'MentorProfile', 'EmployerProfile', 'AnswerVote', 'Notification', 'Application', 'Bookmark'],
         company: ['Job'],
         channel: ['Thread'],
         thread: ['Answer'],

@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 import { prisma } from '@/lib/db';
+import { auth } from '@/lib/auth';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
@@ -8,6 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Pagination } from '@/components/ui/pagination';
 import { FilterChips } from '@/components/layout/filter-chips';
+import { BookmarkButton } from '@/components/layout/bookmark-button';
 import { Search, Users } from 'lucide-react';
 import { initials } from '@/lib/utils';
 
@@ -24,6 +26,17 @@ export default async function MentorsPage({ searchParams }: PageProps) {
   const tCommon = await getTranslations('common');
   const sp = await searchParams;
   const db = prisma;
+
+  // Session & Bookmarks fetch
+  const session = await auth();
+  const userId = session?.user?.id;
+  const bookmarks = userId
+    ? await db.bookmark.findMany({
+        where: { userId, type: 'MENTOR' },
+        select: { targetId: true },
+      })
+    : [];
+  const bookmarkedIds = new Set(bookmarks.map((b) => b.targetId));
 
   const baseWhere = { verified: true } as const;
 
@@ -106,20 +119,20 @@ export default async function MentorsPage({ searchParams }: PageProps) {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {mentors.map((m) => (
             <Link key={m.id} href={`/mentors/${m.userId}`}>
-              <Card className="h-full transition-colors hover:border-primary/40">
-                <CardHeader className="flex-row gap-3 space-y-0">
-                  <Avatar className="h-12 w-12">
+              <Card className="premium-glow-card relative h-full transition-all border border-border/60 hover:border-primary/45 shadow-sm">
+                <CardHeader className="flex-row gap-3 space-y-0 pr-10">
+                  <Avatar className="h-12 w-12 border border-border/40">
                     {m.user.image && <AvatarImage src={m.user.image} alt={m.user.name} />}
                     <AvatarFallback>{initials(m.user.name)}</AvatarFallback>
                   </Avatar>
                   <div className="min-w-0">
-                    <CardTitle className="truncate text-base">{m.user.name}</CardTitle>
+                    <CardTitle className="truncate text-base font-semibold group-hover:text-primary">{m.user.name}</CardTitle>
                     <p className="truncate text-xs text-muted-foreground">
                       {m.position} · {m.company}
                     </p>
                   </div>
                 </CardHeader>
-                <CardContent className="space-y-2">
+                <CardContent className="space-y-3">
                   <p className="text-sm text-muted-foreground">{t('experience', { years: m.yearsOfExperience })}</p>
                   <div className="flex flex-wrap gap-1.5">
                     {m.expertise.slice(0, 4).map((s) => (
@@ -128,8 +141,22 @@ export default async function MentorsPage({ searchParams }: PageProps) {
                       </Badge>
                     ))}
                   </div>
-                  <Badge variant="success">{t('verified')}</Badge>
+                  <div className="flex items-center justify-between pt-1">
+                    <Badge variant="success" className="text-[10px] py-0 px-2 font-medium">
+                      {t('verified')}
+                    </Badge>
+                  </div>
                 </CardContent>
+                {/* Optimistic bookmark button */}
+                <div className="absolute top-3 right-3 z-10">
+                  <BookmarkButton
+                    type="MENTOR"
+                    targetId={m.id}
+                    initialBookmarked={bookmarkedIds.has(m.id)}
+                    size="icon"
+                    variant="ghost"
+                  />
+                </div>
               </Card>
             </Link>
           ))}

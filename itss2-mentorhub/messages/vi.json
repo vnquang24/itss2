@@ -40,6 +40,7 @@
     "applications": "Đơn ứng tuyển",
     "employer": "Nhà tuyển dụng",
     "chat": "Tin nhắn",
+    "bookmarks": "Đã lưu",
     "profile": "Hồ sơ",
     "admin": "Quản trị",
     "logout": "Đăng xuất",
@@ -173,7 +174,10 @@
     "notOpen": "Mentor hiện không mở chat",
     "searchPlaceholder": "Tìm theo tên, công ty, kỹ năng...",
     "emptyTitle": "Chưa có mentor phù hợp",
-    "emptyHint": "Hãy thử từ khóa khác hoặc quay lại sau."
+    "emptyHint": "Hãy thử từ khóa khác hoặc quay lại sau.",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "achievements": "Thành tích nổi bật"
   },
   "companies": {
     "title": "Doanh nghiệp",
@@ -398,9 +402,25 @@
     "ctaTitle": "Sẵn sàng bắt đầu hành trình của bạn?",
     "ctaSubtitle": "Tham gia cộng đồng sinh viên, mentor và doanh nghiệp công nghệ ngay hôm nay."
   },
+  "bookmarks": {
+    "title": "Nội dung đã lưu",
+    "subtitle": "Xem lại các cố vấn, bài viết và câu trả lời bạn đã lưu.",
+    "tabs": {
+      "mentors": "Cố vấn ({count})",
+      "threads": "Bài viết ({count})",
+      "answers": "Câu trả lời ({count})"
+    },
+    "empty": "Chưa có nội dung nào được lưu.",
+    "save": "Lưu lại",
+    "unsave": "Bỏ lưu",
+    "saved": "Đã lưu",
+    "toastSaved": "Đã lưu vào danh sách.",
+    "toastUnsaved": "Đã xóa khỏi danh sách lưu."
+  },
   "notifications": {
     "title": "Thông báo",
     "empty": "Chưa có thông báo",
     "aria": "Thông báo"
   }
 }
+

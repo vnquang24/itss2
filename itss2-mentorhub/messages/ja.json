@@ -40,6 +40,7 @@
     "applications": "応募状況",
     "employer": "採用担当",
     "chat": "メッセージ",
+    "bookmarks": "ブックマーク",
     "profile": "プロフィール",
     "admin": "管理",
     "logout": "ログアウト",
@@ -173,7 +174,10 @@
     "notOpen": "現在チャット受付停止中",
     "searchPlaceholder": "名前・会社・スキルで検索...",
     "emptyTitle": "条件に合うメンターがいません",
-    "emptyHint": "別のキーワードを試すか、しばらくしてからもう一度お試しください。"
+    "emptyHint": "別のキーワードを試すか、しばらくしてからもう一度お試しください。",
+    "github": "GitHub",
+    "linkedin": "LinkedIn",
+    "achievements": "主な実績"
   },
   "companies": {
     "title": "企業",
@@ -398,9 +402,25 @@
     "ctaTitle": "あなたの旅をはじめる準備はできていますか?",
     "ctaSubtitle": "学生・メンター・企業が集まる技術コミュニティに今すぐ参加しましょう。"
   },
+  "bookmarks": {
+    "title": "ブックマーク一覧",
+    "subtitle": "保存したメンター、スレッド、回答を確認できます。",
+    "tabs": {
+      "mentors": "メンター ({count})",
+      "threads": "スレッド ({count})",
+      "answers": "回答 ({count})"
+    },
+    "empty": "ブックマークされたコンテンツはありません。",
+    "save": "保存する",
+    "unsave": "保存解除",
+    "saved": "保存済み",
+    "toastSaved": "ブックマークに保存しました。",
+    "toastUnsaved": "ブックマークから削除しました。"
+  },
   "notifications": {
     "title": "通知",
     "empty": "通知はまだありません",
     "aria": "通知"
   }
 }
+

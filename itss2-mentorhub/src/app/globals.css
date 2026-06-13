@@ -55,7 +55,7 @@
 
 @layer base {
   * { @apply border-border; }
-  html { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
   body { @apply bg-background text-foreground font-sans; font-feature-settings: 'cv11', 'ss01'; }
   :focus-visible { @apply outline-none ring-2 ring-ring/40 ring-offset-2 ring-offset-background; }
 
@@ -77,4 +77,15 @@
     content: attr(data-placeholder);
     @apply text-muted-foreground pointer-events-none float-left h-0;
   }
+  
+  /* Visual styling enhancements */
+  .premium-glow-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  }
+  .premium-glow-card:hover {
+    box-shadow: 0 12px 24px -10px rgba(0, 0, 0, 0.08), 0 4px 12px -5px rgba(0, 0, 0, 0.03) !important;
+    border-color: hsl(var(--primary) / 0.4) !important;
+    transform: translateY(-2px);
+  }
 }
+
