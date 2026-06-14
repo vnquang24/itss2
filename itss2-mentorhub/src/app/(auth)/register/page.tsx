@@ -47,11 +47,7 @@ export default function RegisterPage() {
       if (loginRes?.error) {
         router.push('/login');
       } else {
-        if (form.role === 'STUDENT') {
-          router.push('/setup-tags');
-        } else {
-          router.push('/channels');
-        }
+        router.push('/channels');
         router.refresh();
       }
     });

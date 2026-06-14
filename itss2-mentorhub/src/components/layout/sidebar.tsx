@@ -3,15 +3,13 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslations } from 'next-intl';
-import { MessagesSquare, Users, MessageCircle, Bookmark } from 'lucide-react';
+import { MessagesSquare, Users, MessageCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-// Added Bookmarks to navigation items
 const items = [
   { href: '/channels', key: 'channels', icon: MessagesSquare },
   { href: '/mentors', key: 'mentors', icon: Users },
   { href: '/chat', key: 'chat', icon: MessageCircle },
-  { href: '/bookmarks', key: 'bookmarks', icon: Bookmark },
 ] as const;
 
 export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {

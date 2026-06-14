@@ -336,6 +336,12 @@ async function main() {
       create: { email: m.email, name: m.name, password: pwd, role: 'MENTOR', verified: true },
     });
     mentorUsers[m.email] = { id: u.id };
+
+    // Link GitHub/LinkedIn giả tượng trưng — suy ra từ email (vd mentor.linh -> linh).
+    const handle = m.email.split('@')[0].split('.').pop() ?? 'mentor';
+    const github = `https://github.com/${handle}-dev`;
+    const linkedin = `https://www.linkedin.com/in/${handle}-mentor`;
+
     await prisma.mentorProfile.upsert({
       where: { userId: u.id },
       update: {
@@ -344,6 +350,8 @@ async function main() {
         yearsOfExperience: m.yearsOfExperience,
         expertise: m.expertise,
         bio: m.bio,
+        github,
+        linkedin,
         verified: true,
         openToChat: true,
       },
@@ -354,6 +362,8 @@ async function main() {
         yearsOfExperience: m.yearsOfExperience,
         expertise: m.expertise,
         bio: m.bio,
+        github,
+        linkedin,
         verified: true,
         openToChat: true,
       },
@@ -696,6 +706,46 @@ async function main() {
             },
           ],
         },
+        {
+          id: 'th-cv-4',
+          title: 'Chưa có kinh nghiệm đi làm thì viết gì vào CV để qua vòng loại?',
+          authorEmail: 'phuc@student.local',
+          tags: ['cv', 'fresher', 'resume'],
+          content:
+            '<p>Em là sinh viên năm 3, chưa từng đi thực tập nên CV trống trơn phần "kinh nghiệm". Em nên viết gì để không bị loại ngay từ vòng đọc CV ạ?</p>',
+          answers: [
+            {
+              id: 'an-cv-4-1',
+              authorEmail: 'mentor.hieu@itss.local',
+              accepted: true,
+              content:
+                '<p>Fresher không có job experience là chuyện bình thường — recruiter biết điều đó. Cái họ tìm là <strong>bằng chứng bạn biết code thật</strong>. Thay phần "Experience" bằng:</p><ol><li><strong>Projects</strong> (quan trọng nhất): 2–3 dự án cá nhân/nhóm. Mỗi dự án ghi: bài toán → công nghệ dùng → <em>kết quả đo được</em> ("giảm thời gian load từ 4s xuống 1s", "100 user thật"). Kèm link GitHub + demo.</li><li><strong>Tech stack</strong>: chỉ liệt kê thứ bạn thật sự dùng được, đừng spam.</li><li><strong>Hoạt động</strong>: CLB lập trình, hackathon, đóng góp open-source (dù chỉ 1 PR nhỏ), bài viết kỹ thuật.</li><li><strong>Học vấn + khóa học</strong> có chứng chỉ liên quan.</li></ol><p>3 quy tắc vàng: CV <strong>1 trang</strong>, mô tả bằng <strong>động từ + số liệu</strong>, và GitHub phải có commit gần đây + README tử tế. Recruiter bấm vào GitHub trống là loại ngay.</p>',
+            },
+            {
+              id: 'an-cv-4-2',
+              authorEmail: 'mentor.trang@itss.local',
+              content:
+                '<p>Thêm: một project "hoàn thiện + deploy được" ăn đứt 5 project bỏ dở. Chọn 1 cái bạn tự tin nhất, làm cho xong và viết README rõ ràng — đó là thứ phỏng vấn sẽ hỏi sâu.</p>',
+            },
+          ],
+        },
+        {
+          id: 'th-cv-5',
+          title: 'Bị hỏi "mức lương mong muốn" khi đi phỏng vấn fresher — trả lời sao?',
+          authorEmail: 'quynh@student.local',
+          tags: ['interview', 'salary', 'negotiation'],
+          content:
+            '<p>Em đi phỏng vấn intern/fresher và rất sợ câu "Em mong muốn mức lương bao nhiêu?". Nói cao sợ bị loại, nói thấp thì thiệt. Anh chị tư vấn cách trả lời ạ?</p>',
+          answers: [
+            {
+              id: 'an-cv-5-1',
+              authorEmail: 'mentor.trang@itss.local',
+              accepted: true,
+              content:
+                '<p>Đây là câu kiểm tra sự chuẩn bị, không phải bẫy. Quy trình:</p><ol><li><strong>Research trước</strong>: hỏi anh chị khóa trên, xem ITviec/TopDev/Glassdoor để biết khoảng lương fresher cho vị trí + thành phố đó.</li><li><strong>Đưa khoảng (range), đừng đưa 1 con số</strong>: ví dụ "Em tham khảo thị trường thì vị trí này khoảng X–Y. Em mong muốn trong khoảng đó, nhưng em ưu tiên môi trường học hỏi nên có thể linh hoạt." Để cận dưới của range vẫn là mức bạn chấp nhận được.</li><li><strong>Nếu chưa biết gì</strong>: lịch sự hỏi ngược "Anh/chị có thể chia sẻ khoảng ngân sách cho vị trí này không ạ?" — hoàn toàn hợp lệ.</li></ol><p>Đừng nói "bao nhiêu cũng được" — nghe thiếu tự tin và sẽ bị offer thấp. Biết giá trị của mình nhưng thể hiện sự cầu thị.</p>',
+            },
+          ],
+        },
       ],
     },
 
@@ -773,6 +823,46 @@ async function main() {
             },
           ],
         },
+        {
+          id: 'th-fe-4',
+          title: 'useEffect chạy 2 lần khi mount — em làm sai gì à?',
+          authorEmail: 'my@student.local',
+          tags: ['react', 'useEffect', 'strict-mode'],
+          content:
+            '<p>Em mới lên React 19, thấy <code>useEffect</code> log ra <strong>2 lần</strong> ngay khi component mount, dù dependency để rỗng <code>[]</code>. Em có bị memory leak hay gọi API 2 lần không ạ?</p>',
+          answers: [
+            {
+              id: 'an-fe-4-1',
+              authorEmail: 'mentor.bich@itss.local',
+              accepted: true,
+              content:
+                '<p>Bình tĩnh — đây là <strong>hành vi cố ý của React Strict Mode ở môi trường dev</strong>, KHÔNG xảy ra ở production build.</p><ol><li>React mount → unmount → mount lại để <em>kiểm tra effect của bạn có cleanup đúng không</em>.</li><li>Cách fix đúng: luôn <code>return</code> một cleanup function. Với fetch thì dùng <code>AbortController</code>:<pre><code>useEffect(() =&gt; {\n  const ctrl = new AbortController();\n  fetch(url, { signal: ctrl.signal })...\n  return () =&gt; ctrl.abort();\n}, [url]);</code></pre></li><li>Đừng tắt Strict Mode để "che" — nó đang giúp bạn lộ bug sớm.</li></ol><p>Nếu effect của bạn idempotent + có cleanup → double-invoke hoàn toàn vô hại.</p>',
+            },
+            {
+              id: 'an-fe-4-2',
+              authorEmail: 'mentor.tuan@itss.local',
+              content:
+                '<p>Thêm: phần lớn việc fetch dữ liệu trong App Router nên làm ở Server Component hoặc qua TanStack Query — bạn sẽ gần như không cần <code>useEffect</code> để fetch nữa, và vấn đề double-invoke biến mất.</p>',
+            },
+          ],
+        },
+        {
+          id: 'th-fe-5',
+          title: 'Hydration mismatch — "Text content does not match" sửa thế nào?',
+          authorEmail: 'viet@student.local',
+          tags: ['nextjs', 'hydration', 'ssr'],
+          content:
+            '<p>Console Next.js của em báo <code>Hydration failed because the server rendered HTML didn\'t match the client</code>. Trang vẫn chạy nhưng nhấp nháy. Nguyên nhân và cách xử lý ạ?</p>',
+          answers: [
+            {
+              id: 'an-fe-5-1',
+              authorEmail: 'mentor.tuan@itss.local',
+              accepted: true,
+              content:
+                '<p>Hydration mismatch xảy ra khi HTML server render KHÁC với lần render đầu ở client. 4 thủ phạm hay gặp:</p><ol><li><strong>Thời gian / ngẫu nhiên</strong>: <code>new Date()</code>, <code>Math.random()</code>, <code>Date.now()</code> render ra giá trị khác nhau hai phía. → tính ở effect, hoặc truyền từ server xuống cố định.</li><li><strong>Đọc <code>window</code>/<code>localStorage</code> khi render</strong>: server không có. → bọc trong <code>useEffect</code> hoặc check <code>typeof window !== "undefined"</code>.</li><li><strong>HTML không hợp lệ</strong>: <code>&lt;p&gt;</code> lồng <code>&lt;div&gt;</code>, <code>&lt;a&gt;</code> lồng <code>&lt;a&gt;</code> — trình duyệt tự sửa nên lệch.</li><li><strong>Extension trình duyệt</strong> chèn attribute (Grammarly...) — thử ẩn danh để loại trừ.</li></ol><p>Mẹo cuối: nếu một mẩu UI <em>buộc</em> phải khác nhau (vd hiển thị giờ local), dùng <code>suppressHydrationWarning</code> cho đúng node đó thay vì cả cây.</p>',
+            },
+          ],
+        },
       ],
     },
 
@@ -846,6 +936,46 @@ async function main() {
               authorEmail: 'mentor.khoi@itss.local',
               content:
                 '<p>+1. Cảnh báo nhỏ: GraphQL mở cho external = phải nghĩ đến query depth limit, persisted queries, DataLoader… chi phí vận hành không nhỏ như mọi người tưởng.</p>',
+            },
+          ],
+        },
+        {
+          id: 'th-be-4',
+          title: 'JWT lưu ở localStorage hay httpOnly cookie thì an toàn hơn?',
+          authorEmail: 'tam@student.local',
+          tags: ['security', 'jwt', 'auth', 'cookie'],
+          content:
+            '<p>Em làm chức năng đăng nhập bằng JWT. Tutorial thì lưu token vào <code>localStorage</code>, nhưng có bài bảo làm vậy dễ bị XSS. Vậy nên lưu ở đâu cho đúng ạ?</p>',
+          answers: [
+            {
+              id: 'an-be-4-1',
+              authorEmail: 'mentor.an@itss.local',
+              accepted: true,
+              content:
+                '<p>Ngắn gọn: <strong>ưu tiên httpOnly cookie</strong>, tránh localStorage cho token nhạy cảm.</p><ul><li><strong>localStorage</strong>: bất kỳ script nào chạy trên trang (kể cả thư viện bên thứ ba bị nhiễm) đều đọc được → một lỗ XSS là mất token. Không nên cho access/refresh token.</li><li><strong>httpOnly + Secure + SameSite cookie</strong>: JS không đọc được (chống XSS lấy token), chỉ gửi qua HTTPS. Đổi lại bạn phải chống CSRF.</li></ul><p>Combo thực dụng cho web app:</p><ol><li>Refresh token: <code>httpOnly; Secure; SameSite=Lax</code>, path giới hạn ở endpoint refresh.</li><li>Access token: đời sống ngắn (5–15 phút), giữ trong memory (biến JS), không persist.</li><li>Chống CSRF bằng <code>SameSite</code> + double-submit token cho các request thay đổi dữ liệu.</li></ol><p>Quan trọng nhất vẫn là <strong>diệt tận gốc XSS</strong> (escape output, CSP) — vì XSS thì kiểu lưu nào cũng đau.</p>',
+            },
+            {
+              id: 'an-be-4-2',
+              authorEmail: 'mentor.minh@itss.local',
+              content:
+                '<p>Nếu dùng NextAuth/Auth.js thì khỏi tự xoay: nó đã set session cookie <code>httpOnly</code> + <code>SameSite</code> mặc định. Đừng tự chế lại auth khi chưa cần.</p>',
+            },
+          ],
+        },
+        {
+          id: 'th-be-5',
+          title: 'N+1 query làm API chậm — phát hiện và fix thế nào?',
+          authorEmail: 'nhi@student.local',
+          tags: ['performance', 'orm', 'database', 'n+1'],
+          content:
+            '<p>API list bài viết của em gọi tới ~50 query cho 1 request, chậm kinh khủng. Anh chị bảo đây là "N+1". Em chưa hiểu rõ và không biết fix sao với Prisma ạ.</p>',
+          answers: [
+            {
+              id: 'an-be-5-1',
+              authorEmail: 'mentor.linh@itss.local',
+              accepted: true,
+              content:
+                '<p><strong>N+1</strong> = bạn chạy 1 query lấy danh sách (N bản ghi), rồi với MỖI bản ghi lại chạy thêm 1 query lấy dữ liệu liên quan → tổng 1 + N query.</p><p>Ví dụ sai: lấy 50 post rồi loop từng post gọi <code>findUnique(author)</code> → 51 query.</p><p>Cách fix với Prisma:</p><ol><li><strong>Eager load bằng <code>include</code>/<code>select</code></strong>: <code>prisma.post.findMany({ include: { author: true } })</code> → Prisma gom thành 1–2 query.</li><li><strong>Bật query log</strong> (<code>new PrismaClient({ log: ["query"] })</code>) để đếm số query thật sự chạy.</li><li>Với quan hệ nhiều cấp, chỉ <code>select</code> đúng field cần — đừng kéo cả bảng.</li></ol><p>Nguyên tắc: nếu thấy query nằm trong vòng lặp / <code>.map()</code> → gần như chắc chắn là N+1, kéo nó ra ngoài thành 1 truy vấn gộp.</p>',
             },
           ],
         },

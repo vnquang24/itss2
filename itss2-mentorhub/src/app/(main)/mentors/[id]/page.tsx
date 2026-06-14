@@ -147,6 +147,42 @@ export default async function MentorProfilePage({ params }: { params: Promise<{ 
               ))}
             </div>
           </div>
+
+          {(mentor.github || mentor.linkedin) && (
+            <div className="space-y-2">
+              <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">{t('links')}</h3>
+              <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap">
+                {mentor.github && (
+                  <a
+                    href={mentor.github.startsWith('http') ? mentor.github : `https://github.com/${mentor.github}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 rounded-lg border border-border/60 bg-card px-3 py-2 text-sm transition-colors hover:border-primary/40 hover:bg-accent/50"
+                  >
+                    <Github className="h-4 w-4 text-muted-foreground" />
+                    <span className="font-medium">{t('github')}</span>
+                    <span className="truncate text-xs text-muted-foreground">
+                      {mentor.github.replace(/^https?:\/\//, '')}
+                    </span>
+                  </a>
+                )}
+                {mentor.linkedin && (
+                  <a
+                    href={mentor.linkedin.startsWith('http') ? mentor.linkedin : `https://linkedin.com/in/${mentor.linkedin}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 rounded-lg border border-border/60 bg-card px-3 py-2 text-sm transition-colors hover:border-primary/40 hover:bg-accent/50"
+                  >
+                    <Linkedin className="h-4 w-4 text-muted-foreground" />
+                    <span className="font-medium">{t('linkedin')}</span>
+                    <span className="truncate text-xs text-muted-foreground">
+                      {mentor.linkedin.replace(/^https?:\/\//, '')}
+                    </span>
+                  </a>
+                )}
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
     </div>

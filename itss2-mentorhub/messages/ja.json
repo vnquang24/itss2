@@ -126,8 +126,20 @@
       "DATA_AI": "Data / AI",
       "PROCESS_GIT": "Git ・ プロセス",
       "PROCESS_SCRUM": "Scrum ・ Agile",
-      "CAREER": "キャリア"
+      "CAREER": "キャリア",
+      "OTHER": "その他"
     }
+  },
+  "faq": {
+    "title": "よくある質問",
+    "subtitle": "新しく質問する前に、解決済みの質問をスマート検索しましょう。",
+    "searchPlaceholder": "質問を入力してください。例:マージコンフリクトの解決方法は?",
+    "popularLabel": "注目の質問",
+    "resultLabel": "関連する質問 {count} 件",
+    "answersCount": "回答 {count} 件",
+    "solved": "解決済み",
+    "empty": "該当する質問が見つかりません。別のキーワードを試すか、下のチャンネルで新しく質問してください。",
+    "emptyPopular": "まだ解決済みの質問がありません。"
   },
   "threads": {
     "newTitle": "新しい質問・トピックを投稿",
@@ -177,6 +189,7 @@
     "emptyHint": "別のキーワードを試すか、しばらくしてからもう一度お試しください。",
     "github": "GitHub",
     "linkedin": "LinkedIn",
+    "links": "リンク",
     "achievements": "主な実績"
   },
   "companies": {

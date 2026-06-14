@@ -126,8 +126,20 @@
       "DATA_AI": "Data / AI",
       "PROCESS_GIT": "Git & Quy trình",
       "PROCESS_SCRUM": "Scrum & Agile",
-      "CAREER": "Nghề nghiệp"
+      "CAREER": "Nghề nghiệp",
+      "OTHER": "Khác"
     }
+  },
+  "faq": {
+    "title": "Câu hỏi thường gặp",
+    "subtitle": "Tìm kiếm thông minh trong các câu hỏi đã được giải đáp trước khi đặt câu hỏi mới.",
+    "searchPlaceholder": "Nhập câu hỏi của bạn, ví dụ: làm sao xử lý merge conflict?",
+    "popularLabel": "Câu hỏi nổi bật",
+    "resultLabel": "{count} câu hỏi liên quan",
+    "answersCount": "{count} trả lời",
+    "solved": "Đã có giải pháp",
+    "empty": "Chưa tìm thấy câu hỏi phù hợp. Hãy thử từ khóa khác hoặc đặt câu hỏi mới trong kênh bên dưới.",
+    "emptyPopular": "Chưa có câu hỏi nào được giải đáp."
   },
   "threads": {
     "newTitle": "Đăng câu hỏi / chủ đề mới",
@@ -177,6 +189,7 @@
     "emptyHint": "Hãy thử từ khóa khác hoặc quay lại sau.",
     "github": "GitHub",
     "linkedin": "LinkedIn",
+    "links": "Liên kết",
     "achievements": "Thành tích nổi bật"
   },
   "companies": {
